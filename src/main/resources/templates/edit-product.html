@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать товар</title>
+</head>
+<body>
+<a href="/products">К списку товаров</a>
+<h1>Редактировать товар</h1>
+<form method="post" th:action="@{/products/{productId}/edit(productId=${product.id})}">
+  <input type="hidden" name="id" th:value="${product.id}">
+  <label>
+    Название:<br>
+    <input type="text" name="title" th:value="${product.title}" required>
+  </label><br>
+  <label>
+    Описание:<br>
+    <textarea name="description" th:text="${product.description}" required></textarea>
+  </label><br>
+  <button type="submit">Сохранить</button>
+</form>
+</body>
+</html>

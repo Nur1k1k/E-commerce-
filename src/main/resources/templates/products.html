@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список товаров</title>
+</head>
+<body>
+<h1>Список товаров</h1>
+<a href="/products/new">Создать новый товар</a>
+<ul>
+    <li th:each="product : ${products}">
+        <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.title}"></a>
+        <form th:action="@{/products/{id}/delete(id=${product.id})}" method="post" style="display:inline;">
+            <button type="submit">Удалить</button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

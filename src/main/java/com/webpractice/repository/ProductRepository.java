@@ -1,12 +1,9 @@
 package com.webpractice.repository;
 
 import com.webpractice.entity.Product;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ProductRepository {
-    List<Product> findAll();
-    Product save(Product product);
-    Optional<Product> findById(Integer productId);
-    void deleteById(Integer id);
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 }

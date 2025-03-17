@@ -1,14 +1,22 @@
 package com.webpractice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Entity
+@Table(name = "products")
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false, length = 500)
     private String description;
 }

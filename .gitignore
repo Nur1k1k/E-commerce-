@@ -1,4 +1,4 @@
-HELP.md
+git remote add origin https://github.com/Nur1k1k/E-commerce-.gitHELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
