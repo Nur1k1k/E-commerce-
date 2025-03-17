@@ -7,10 +7,19 @@
 <body>
 <h1>Список товаров</h1>
 <a href="/products/new">Создать новый товар</a>
+
 <ul>
     <li th:each="product : ${products}">
+        <!-- Отображение фото -->
+        <img th:src="@{/products/uploads/{filename}(filename=${product.imageUrl})}" alt="Фото товара">
+
+        <!-- Название товара с ссылкой на детали -->
         <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.title}"></a>
-        <form th:action="@{/products/{id}/delete(id=${product.id})}" method="post" style="display:inline;">
+
+        <!-- Форма для удаления товара -->
+        <form th:action="@{/products/{id}/delete(id=${product.id})}"
+              method="post"
+              style="display:inline;">
             <button type="submit">Удалить</button>
         </form>
     </li>

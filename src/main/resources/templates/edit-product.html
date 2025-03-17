@@ -7,16 +7,31 @@
 <body>
 <a href="/products">К списку товаров</a>
 <h1>Редактировать товар</h1>
-<form method="post" th:action="@{/products/{productId}/edit(productId=${product.id})}">
-  <input type="hidden" name="id" th:value="${product.id}">
+
+<form method="post" th:action="@{/products/{id}/edit(id=${product.id})}" th:object="${product}" enctype="multipart/form-data">
   <label>
     Название:<br>
-    <input type="text" name="title" th:value="${product.title}" required>
+    <input type="text" th:field="*{title}" required>
   </label><br>
+
   <label>
     Описание:<br>
-    <textarea name="description" th:text="${product.description}" required></textarea>
+    <textarea th:field="*{description}" required></textarea>
   </label><br>
+
+  <!-- Отображение текущего фото -->
+  <div th:if="${product.imageUrl}">
+    <img th:src="${product.imageUrl}" alt="Фото товара" width="100"><br>
+  </div>
+
+  <!-- Скрытое поле для передачи старого изображения -->
+  <input type="hidden" th:field="*{imageUrl}">
+
+  <label>
+    Загрузить новое фото:<br>
+    <input type="file" name="image">
+  </label><br>
+
   <button type="submit">Сохранить</button>
 </form>
 </body>

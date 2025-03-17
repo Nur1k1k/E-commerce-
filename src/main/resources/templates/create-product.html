@@ -7,15 +7,23 @@
 <body>
 <a href="/products">К списку товаров</a>
 <h1>Создать товар</h1>
-<form method="post" action="/products">
+
+<form method="post" th:action="@{/products}" th:object="${product}" enctype="multipart/form-data">
   <label>
     Название:<br>
-    <input type="text" name="title" required>
+    <input type="text" th:field="*{title}" required>
   </label><br>
+
   <label>
     Описание:<br>
-    <textarea name="description" required></textarea>
+    <textarea th:field="*{description}" required></textarea>
   </label><br>
+
+  <label>
+    Фото:<br>
+    <input type="file" name="image">
+  </label><br>
+
   <button type="submit">Создать</button>
 </form>
 </body>
