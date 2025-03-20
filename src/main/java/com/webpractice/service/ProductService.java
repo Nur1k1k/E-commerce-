@@ -21,15 +21,17 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public void createProduct(String title, String description, String imageUrl) {
+    public void createProduct(String title, String description, String imageUrl, String category, Integer price) {
         Product product = new Product();
         product.setTitle(title);
         product.setDescription(description);
         product.setImageUrl(imageUrl);
+        product.setCategory(category);
+        product.setPrice(price);
         productRepository.save(product);
     }
 
-    public void updateProduct(Integer id, String title, String description, String imageUrl) {
+    public void updateProduct(Integer id, String title, String description, String imageUrl, String category, Integer price) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Товар не найден"));
         product.setTitle(title);
@@ -37,6 +39,8 @@ public class ProductService {
         if (imageUrl != null) {
             product.setImageUrl(imageUrl);
         }
+        product.setCategory(category);
+        product.setPrice(price);
         productRepository.save(product);
     }
 

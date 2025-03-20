@@ -1,38 +1,83 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Редактировать товар</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .container {
+      max-width: 500px;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .img-preview {
+      max-width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-<a href="/products">К списку товаров</a>
-<h1>Редактировать товар</h1>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Редактировать товар</h2>
+  <form th:action="@{/products/{id}/edit(id=${product.id})}" method="post" enctype="multipart/form-data">
 
-<form method="post" th:action="@{/products/{id}/edit(id=${product.id})}" th:object="${product}" enctype="multipart/form-data">
-  <label>
-    Название:<br>
-    <input type="text" th:field="*{title}" required>
-  </label><br>
+    <div class="mb-3">
+      <label class="form-label">Название товара</label>
+      <input type="text" name="title" class="form-control" th:value="${product.title}" required>
+    </div>
 
-  <label>
-    Описание:<br>
-    <textarea th:field="*{description}" required></textarea>
-  </label><br>
+    <div class="mb-3">
+      <label class="form-label">Описание</label>
+      <textarea name="description" class="form-control" th:text="${product.description}"></textarea>
+    </div>
 
-  <!-- Отображение текущего фото -->
-  <div th:if="${product.imageUrl}">
-    <img th:src="${product.imageUrl}" alt="Фото товара" width="100"><br>
-  </div>
+    <div class="mb-3">
+      <label class="form-label">Категория</label>
+      <select name="category" class="form-select" required>
+        <option value="smartphone" th:selected="${product.category == 'smartphone'}">Смартфон</option>
+        <option value="laptop" th:selected="${product.category == 'laptop'}">Ноутбук</option>
+        <option value="console" th:selected="${product.category == 'console'}">Игровая консоль</option>
+      </select>
+    </div>
 
-  <!-- Скрытое поле для передачи старого изображения -->
-  <input type="hidden" th:field="*{imageUrl}">
+    <div class="mb-3">
+      <label class="form-label">Цена (₸)</label>
+      <input type="number" name="price" step="0.01" class="form-control" th:value="${product.price}" required>
+    </div>
 
-  <label>
-    Загрузить новое фото:<br>
-    <input type="file" name="image">
-  </label><br>
+    <div class="mb-3">
+      <label class="form-label">Текущее изображение</label>
+      <img th:src="@{/products/uploads/{filename}(filename=${product.imageUrl})}" class="img-preview" alt="Текущее изображение">
+    </div>
 
-  <button type="submit">Сохранить</button>
-</form>
+    <div class="mb-3">
+      <label class="form-label">Новое изображение</label>
+      <input type="file" name="image" class="form-control" id="imageInput">
+      <img id="preview" class="img-preview" style="display: none;">
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <a href="/products" class="btn btn-secondary">Назад</a>
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('imageInput').addEventListener('change', function(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      const preview = document.getElementById('preview');
+      preview.src = reader.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  });
+</script>
 </body>
 </html>

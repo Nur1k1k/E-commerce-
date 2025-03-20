@@ -25,7 +25,6 @@ import java.util.UUID;
 public class ProductsController {
     private final ProductService productService;
 
-    // Получение всех товаров
     @GetMapping
     public String getAllProducts(Model model) {
         List<Product> products = productService.findAllProducts();
@@ -33,14 +32,12 @@ public class ProductsController {
         return "products";
     }
 
-    // Форма создания товара
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("product", new Product());
         return "create-product";
     }
 
-    // Отображение изображений
     @GetMapping("/uploads/{filename}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         try {
@@ -60,7 +57,6 @@ public class ProductsController {
         }
     }
 
-    // Создание товара
     @PostMapping
     public String createProduct(@ModelAttribute Product product, @RequestParam("image") MultipartFile imageFile) {
         try {
@@ -80,7 +76,7 @@ public class ProductsController {
                 product.setImageUrl(fileName);  // сохраняем только имя файла
             }
 
-            productService.createProduct(product.getTitle(), product.getDescription(), product.getImageUrl());
+            productService.createProduct(product.getTitle(), product.getDescription(), product.getImageUrl(), product.getCategory(), product.getPrice());
         } catch (IOException e) {
             throw new RuntimeException("Ошибка загрузки файла", e);
         }
@@ -88,7 +84,6 @@ public class ProductsController {
         return "redirect:/products";
     }
 
-    // Получение одного товара
     @GetMapping("/{productId}")
     public String getProduct(@PathVariable Integer productId, Model model) {
         Product product = productService.findProduct(productId)
@@ -128,7 +123,7 @@ public class ProductsController {
             product.setImageUrl(existingProduct.getImageUrl());
         }
 
-        productService.updateProduct(productId, product.getTitle(), product.getDescription(), product.getImageUrl());
+        productService.updateProduct(productId, product.getTitle(), product.getDescription(), product.getImageUrl(), product.getCategory(), product.getPrice());
         return "redirect:/products";
     }
 

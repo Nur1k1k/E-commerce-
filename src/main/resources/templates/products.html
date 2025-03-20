@@ -1,205 +1,49 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список товаров</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            text-align: center;
-        }
-
-        .container {
-            max-width: 90%;
-            margin: 20px auto;
-        }
-
-        .search-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .search-input {
-            width: 100%;
-            max-width: 300px;
-            padding: 10px;
-            border: 2px solid #7a1ea1;
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .search-input:focus {
-            border-color: #5a0f85;
-            box-shadow: 0 0 8px rgba(122, 30, 161, 0.5);
-        }
-
-        .add-button {
-            background-color: #7a1ea1;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .add-button:hover {
-            background-color: #5a0f85;
-        }
-
-        .products-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .product-container {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            width: 250px;
-            height: auto;
-            text-align: center;
-            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-
-        .product-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .product-image img {
-            max-width: 100%;
-            height: 160px;
-            object-fit: contain;
-        }
-
-        .product-title {
-            font-weight: bold;
-            font-size: 18px;
-            color: #7a1ea1;
-            text-decoration: none;
-            margin-top: 5px;
-            display: block;
-        }
-
-        .product-description {
-            font-size: 14px;
-            color: #444;
-            text-align: justify;
-            max-width: 90%;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-        }
-
-        .more-button {
-            background: none;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: underline;
-            padding: 5px;
-            transition: color 0.3s;
-        }
-
-        .more-button:hover {
-            color: #0056b3;
-        }
-
-        .delete-button {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            cursor: pointer;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .delete-button:hover {
-            background-color: #cc0000;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Список товаров</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .product-img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+    }
+    .smartphone { background-color: #e3f2fd; }  /* Голубой фон */
+    .laptop { background-color: #e8f5e9; }      /* Зеленый фон */
+    .console { background-color: #ede7f6; }     /* Фиолетовый фон */
+  </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Список товаров</h1>
-
-    <div class="search-container">
-        <input type="text" id="searchBox" placeholder="Поиск товара..." class="search-input">
-        <a href="/products/new" class="add-button">+ Добавить товар</a>
-    </div>
-
-    <div class="products-list">
-        <div th:each="product : ${products}" class="product-container">
-            <div class="product-image">
-                <img th:src="@{/products/uploads/{filename}(filename=${product.imageUrl})}" alt="Фото товара">
-            </div>
-            <div class="product-info">
-                <a th:href="@{/products/{id}(id=${product.id})}" class="product-title" th:text="${product.title}"></a>
-                <p class="product-description">
-                    <span class="short-text" th:text="${#strings.length(product.description) > 100 ? #strings.substring(product.description, 0, 100) + '...' : product.description}"></span>
-                    <span class="full-text" th:text="${product.description}" style="display: none;"></span>
-                    <button class="more-button" th:if="${#strings.length(product.description) > 100}">Подробнее</button>
-                </p>
-                <form th:action="@{/products/{id}/delete(id=${product.id})}" method="post">
-                    <button type="submit" class="delete-button">Удалить</button>
-                </form>
-            </div>
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Список товаров</h1>
+  <div class="d-flex justify-content-end mb-3">
+    <a href="/products/new" class="btn btn-primary">Добавить товар</a>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-4" th:each="product : ${products}">
+      <div class="card shadow-sm p-3"
+           th:classappend="${product.category == 'smartphone'} ? 'smartphone' :
+                           (${product.category == 'laptop'} ? 'laptop' :
+                           (${product.category == 'console'} ? 'console' : ''))">
+        <img th:src="@{/products/uploads/{filename}(filename=${product.imageUrl})}" class="product-img" alt="Фото товара">
+        <div class="card-body text-center">
+          <h5 class="card-title" th:text="${product.title}"></h5>
+          <div class="d-flex justify-content-center gap-2">
+            <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-outline-primary">Подробнее</a>
+            <form th:action="@{/products/{id}/delete(id=${product.id})}" method="post" class="d-inline">
+              <button type="submit" class="btn btn-danger">Удалить</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-
-<script>
-    // Фильтр товаров
-    document.getElementById("searchBox").addEventListener("input", function() {
-        let filter = this.value.toLowerCase();
-        let items = document.querySelectorAll(".product-container");
-
-        items.forEach(function(item) {
-            let title = item.querySelector(".product-title").textContent.toLowerCase();
-            if (title.includes(filter)) {
-                item.style.display = "block";
-            } else {
-                item.style.display = "none";
-            }
-        });
-    });
-
-    // Функционал скрытия и раскрытия описания
-    document.querySelectorAll(".more-button").forEach(button => {
-        button.addEventListener("click", function() {
-            let description = this.parentElement;
-            let shortText = description.querySelector(".short-text");
-            let fullText = description.querySelector(".full-text");
-
-            if (fullText.style.display === "none") {
-                shortText.style.display = "none";
-                fullText.style.display = "inline";
-                this.textContent = "Скрыть";
-            } else {
-                shortText.style.display = "inline";
-                fullText.style.display = "none";
-                this.textContent = "Подробнее";
-            }
-        });
-    });
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
